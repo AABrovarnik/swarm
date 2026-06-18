@@ -1,0 +1,40 @@
+{
+  "schema": "task.schema.json",
+  "id": "REQUEST-TESLA-2026-06-18-001",
+  "created_at": "2026-06-18T08:42:00Z",
+  "from": "izya",
+  "to": "tesla",
+  "status": "PRINYATA",
+  "subject": "Проверка токенов, env, systemd-юнитов и факта git push",
+  "goal": "Подтвердить, что контур ботов и шины в рабочем состоянии, а все правки закоммичены и запушены, а не лежат локально.",
+  "scope": [
+    "Проверить наличие и содержимое env-файлов: /etc/izya-bot.env, /etc/venya-bot.env, /etc/tesla-bot.env, /etc/student-bot.env. Факт наличия — да/нет, права 600 root:root — да/нет, BOT_TOKEN прописан — да/нет (само значение не логировать, только длину и префикс).",
+    "Проверить systemd-юниты: izya-bot.service, venya-bot.service, tesla-bot.service, student-bot.service. Для каждого: enabled — да/нет, active — да/нет, last status, последние 20 строк journalctl -u.",
+    "Сверить ALLOWED_CHAT_ID в каждом env с каноном: для venya-bot должен быть 228518784, для остальных — уточнить у Изи (сейчас неизвестно).",
+    "Проверить Git: в репозитории AABrovarnik/swarm в ветке tesla/engineering должны быть коммиты с docs/operations/venya-roles.md, docs/operations/internal-comms.md, governance/agent-roles-map.md. Подтвердить, что коммиты запушены (git ls-remote), а не лежат локально (git status на origin).",
+    "Проверить, что в swarm/exchange/ созданы каталоги inbox/, decisions/, reports/, archive/, state/ и схемы schemas/task.schema.json, schemas/report.schema.json существуют и валидны."
+  ],
+  "out_of_scope": [
+    "Не поднимать сервисы, не править env-файлы, не прописывать ALLOWED_CHAT_ID.",
+    "Не делать git push, не мёрджить ветки.",
+    "Не логировать и не выгружать значения BOT_TOKEN."
+  ],
+  "deliverable": {
+    "path": "swarm/exchange/reports/tesla/REPORT-TESLA-2026-06-18-001.md",
+    "format": "markdown",
+    "must_contain": [
+      "Статус по каждому env-файлу (наличие, права, BOT_TOKEN prefix only).",
+      "Статус по каждому systemd-юниту (enabled, active, last status, выжимка journalctl).",
+      "Статус Git: SHA последнего коммита в tesla/engineering, факт git ls-remote, статус git status на origin.",
+      "Статус каталогов и схем swarm/exchange/.",
+      "Список расхождений с каноном и риски."
+    ]
+  },
+  "evidence_required": [
+    "Команды, которые выполнялись, и их вывод (без токенов).",
+    "Ссылки на SHA, ветки, файлы."
+  ],
+  "deadline": "2026-06-18T10:00:00Z",
+  "priority": "high",
+  "escalation": "При расхождениях, которые блокируют запуск колхоза — пожарный доклад Изе немедленно."
+}
