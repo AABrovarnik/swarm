@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AABrovarnik/swarm/schemas/task.schema.json",
+  "title": "Swarm task",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "created_at",
+    "created_by",
+    "goal",
+    "risk",
+    "approval_required",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9]{8}T[0-9]{6}Z-[a-z0-9-]+$"
+    },
+    "parent_id": {
+      "type": ["string", "null"]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "created_by": {
+      "type": "string"
+    },
+    "assigned_to": {
+      "type": ["string", "null"]
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 1
+    },
+    "constraints": {
+      "type": "array",
+      "items": {"type": "string"},
+      "default": []
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "value"],
+        "properties": {
+          "kind": {
+            "enum": ["path", "url", "text", "secret_ref", "task_ref"]
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "risk": {
+      "enum": ["low", "medium", "high", "critical"]
+    },
+    "approval_required": {
+      "type": "boolean"
+    },
+    "deadline": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "status": {
+      "enum": ["open", "claimed", "blocked", "done", "cancelled"]
+    }
+  }
+}
